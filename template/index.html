@@ -95,23 +95,21 @@
     formToSubmit.addEventListener('click', ()=>{
         var senderMsgList = document.createElement('li');
         senderMsgList.classList.add("msgByMe");
-        senderMsgList.textContent =  inputToSend.value;
+        senderMsgList.textContent =  `Me : ${inputToSend.value}`;
         messageArea.appendChild(senderMsgList);
         socket.emit('msg sent', inputToSend.value);
         inputToSend.value =  '';
         window.scrollTo(0, document.body.scrollHeight);
     })
 
-    socket.on('receiveMsg', (msg)=>{
+    socket.on('receiveMsg', ({id, msg})=>{
         var senderMsgList = document.createElement('li');
-        console.log("This is the msg",msg)
+        console.log("This is the msg", msg);
         senderMsgList.classList.add("msgBySender");
-        senderMsgList.textContent =  msg;
+        senderMsgList.textContent =  `${id} : ${msg}`;
         messageArea.appendChild(senderMsgList);
-
         window.scrollTo(0, document.body.scrollHeight);
     })
 
 </script>
-
 </html>

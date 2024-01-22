@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket)=>{
-
+    const id = socket.id.substring(0,4);
     socket.on('msg sent', (msg)=>{
-        socket.broadcast.emit('receiveMsg', msg);
+        socket.broadcast.emit('receiveMsg', {id : id, msg:msg});
     })
 })
 
