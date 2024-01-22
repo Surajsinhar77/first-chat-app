@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        .form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #messages {
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #efefef;
+        }
+
+        .msgByMe{
+            text-align: right;
+            float: left;
+            color: green;
+        }
+
+        .msgBySender{
+            text-align: left;
+            float: left;
+            color: blueviolet;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="messages">
+
+    </ul>
+    <!-- <form id="form" action=""> -->
+    <div class="form">
+        <input id="input" autocomplete="off" /><button id="clickme" style="cursor: pointer;">Send</button>
+    <div/>
+    <!-- </form> -->
+</body>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>.
+<script>
+    var socket = io();
+    const formToSubmit = document.getElementById('clickme');
+    const inputToSend = document.getElementById('input');
+    const messageArea = document.getElementById('messages'); // messgage
+
+    formToSubmit.addEventListener('click', ()=>{
+        var senderMsgList = document.createElement('li');
+        senderMsgList.classList.add("msgByMe");
+        senderMsgList.textContent =  inputToSend.value;
+        messageArea.appendChild(senderMsgList);
+        socket.emit('msg sent', inputToSend.value);
+        inputToSend.value =  '';
+        window.scrollTo(0, document.body.scrollHeight);
+    })
+
+    socket.on('receiveMsg', (msg)=>{
+        var senderMsgList = document.createElement('li');
+        console.log("This is the msg",msg)
+        senderMsgList.classList.add("msgBySender");
+        senderMsgList.textContent =  msg;
+        messageArea.appendChild(senderMsgList);
+
+        window.scrollTo(0, document.body.scrollHeight);
+    })
+
+</script>
+
+</html>
